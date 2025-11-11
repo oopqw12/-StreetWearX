@@ -68,7 +68,7 @@
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                        <img src="playera.jpg" class="Playera" alt="Playera Streetwear">
+                        <img src="playera.jpg" class="card-img-top img-fluid" alt="Playera Streetwear">
                         <div class="card-body">
                             <h5 class="card-title">Playera "Urban Vibe"</h5>
                             <p class="card-text">Playera de algodón grueso. $200.00 MX</p>
@@ -77,7 +77,7 @@
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                        <img src="sudadera.jpg" class="Sudadera"alt="Sudadera Streetwear">
+                        <img src="sudadera.jpg" class="card-img-top img-fluid" alt="Sudadera Streetwear">
                         <div class="card-body">
                             <h5 class="card-title">Sudadera "City Night"</h5>
                             <p class="card-text">Sudadera con capucha. $500.00 MX </p>
@@ -86,7 +86,7 @@
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                        <img src="gorra.png" class="Gorra" alt="Gorra Streetwear">
+                        <img src="gorra.png" class="card-img-top img-fluid" alt="Gorra Streetwear">
                         <div class="card-body">
                             <h5 class="card-title">Gorra "Snapback X"</h5>
                             <p class="card-text">Gorra estilo snapback. $300.00 MX</p>
@@ -108,7 +108,7 @@
             </div>
 
             <div id="pedidosContainer" class="row g-4">
-                </div>
+            </div>
         </div>
     </section>
 
@@ -202,7 +202,7 @@
             const modalElement = document.getElementById('pedidoModal');
             const modal = new bootstrap.Modal(modalElement);
 
-            // Colores de las tarjetas según el estado
+            // Mapeo de estados a clases de color de Bootstrap (para el color de la tarjeta)
             const estadoClasses = {
                 'pendiente': 'info',        
                 'en-produccion': 'primary', 
@@ -210,7 +210,7 @@
                 'enviado': 'success'     
             };
 
-            // Texto visible del estado
+            // Mapeo de estados a textos legibles
             const estadoTexto = {
                 'pendiente': 'Pendiente',
                 'en-produccion': 'En Producción',
@@ -221,7 +221,7 @@
             pedidoForm.addEventListener('submit', (e) => {
                 e.preventDefault();
 
-                // 1. Recolectar datos del formulario
+                // 1. Recolección de Datos
                 const pedido = {
                     nombre: document.getElementById('nombreCliente').value,
                     prenda: document.getElementById('prendaPedido').value,
@@ -233,17 +233,21 @@
                     detalles: document.getElementById('detallesPedido').value
                 };
 
-                // 2. Crear la tarjeta con la información del pedido
+                // 2. Creación de la Tarjeta (Card)
                 const pedidoCard = document.createElement('div');
                 pedidoCard.className = 'col-md-6 col-lg-4';
 
+                // Formateo del precio a Pesos Mexicanos
                 const precioFormateado = pedido.precio.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+                // Formateo de fechas
                 const fechaPed = new Date(pedido.fechaPedido + 'T00:00:00').toLocaleDateString('es-MX');
                 const fechaEnt = new Date(pedido.fechaEntrega + 'T00:00:00').toLocaleDateString('es-MX');
 
+                // Asignación de clases y texto según el estado
                 const headerClass = estadoClasses[pedido.estado] || 'secondary';
                 const footerText = estadoTexto[pedido.estado] || 'Sin Estado';
 
+                // Inyección del HTML de la tarjeta
                 pedidoCard.innerHTML = `
                     <div class="card h-100 shadow-sm">
                         <div class="card-header bg-${headerClass} text-white">
@@ -270,7 +274,7 @@
                 pedidoForm.reset();
                 modal.hide();
 
-                // (Opcional) Mostrar un mensaje de éxito
+                // Mostrar mensaje de éxito (Toast de Bootstrap)
                 const toastEl = document.createElement('div');
                 toastEl.className = 'toast position-fixed top-0 end-0 m-3';
                 toastEl.setAttribute('role', 'alert');
