@@ -29,6 +29,12 @@
         body {
             background-color: #f8f9fa;
         }
+        
+        /* Estilo adicional para asegurar que las imágenes de productos se vean bien */
+        .card-img-top {
+            max-height: 250px; /* Limita la altura de las imágenes de producto */
+            object-fit: cover; /* Asegura que la imagen cubra el área sin deformarse */
+        }
     </style>
 </head>
 <body>
@@ -68,28 +74,28 @@
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                        <img src="playera.jpg" class="card-img-top img-fluid" alt="Playera Streetwear">
+                        <img src="https://via.placeholder.com/400x250/dc3545/FFFFFF?text=Playera+Vibe" class="card-img-top img-fluid" alt="Playera Streetwear">
                         <div class="card-body">
                             <h5 class="card-title">Playera "Urban Vibe"</h5>
-                            <p class="card-text">Playera de algodón grueso. $200.00 MX</p>
+                            <p class="card-text">Playera de algodón grueso. **$200.00 MX**</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                        <img src="sudadera.jpg" class="card-img-top img-fluid" alt="Sudadera Streetwear">
+                        <img src="https://via.placeholder.com/400x250/212529/FFFFFF?text=Sudadera+Night" class="card-img-top img-fluid" alt="Sudadera Streetwear">
                         <div class="card-body">
                             <h5 class="card-title">Sudadera "City Night"</h5>
-                            <p class="card-text">Sudadera con capucha. $500.00 MX </p>
+                            <p class="card-text">Sudadera con capucha. **$500.00 MX**</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                        <img src="gorra.png" class="card-img-top img-fluid" alt="Gorra Streetwear">
+                        <img src="https://via.placeholder.com/400x250/0d6efd/FFFFFF?text=Gorra+Snapback" class="card-img-top img-fluid" alt="Gorra Streetwear">
                         <div class="card-body">
                             <h5 class="card-title">Gorra "Snapback X"</h5>
-                            <p class="card-text">Gorra estilo snapback. $300.00 MX</p>
+                            <p class="card-text">Gorra estilo snapback. **$300.00 MX**</p>
                         </div>
                     </div>
                 </div>
@@ -156,7 +162,7 @@
                             <label for="precioTotal" class="form-label">Precio Total *</label>
                             <div class="input-group">
                                 <span class="input-group-text">$</span>
-                                <input type="number" class="form-control" id="precioTotal" placeholder="0.00" step="0.01" required>
+                                <input type="number" class="form-control" id="precioTotal" placeholder="0.00 (Se auto-rellena)" step="0.01" required>
                             </div>
                         </div>
 
@@ -201,8 +207,28 @@
             const container = document.getElementById('pedidosContainer');
             const modalElement = document.getElementById('pedidoModal');
             const modal = new bootstrap.Modal(modalElement);
+            const prendaPedidoSelect = document.getElementById('prendaPedido');
+            const precioTotalInput = document.getElementById('precioTotal');
 
-            // Mapeo de estados a clases de color de Bootstrap (para el color de la tarjeta)
+            // NUEVO: Mapeo de precios para autocompletar el campo de precio
+            const precios = {
+                'Playera Urban Vibe': 200.00,
+                'Sudadera City Night': 500.00,
+                'Gorra Snapback X': 300.00,
+                'Otro': 0.00 // Para el caso "Otro/Personalizado", el usuario debe ingresar el precio
+            };
+
+            // Listener para autocompletar el precio cuando se selecciona una prenda
+            prendaPedidoSelect.addEventListener('change', () => {
+                const selectedPrenda = prendaPedidoSelect.value;
+                if (precios[selectedPrenda] !== undefined) {
+                    precioTotalInput.value = precios[selectedPrenda].toFixed(2);
+                } else {
+                    precioTotalInput.value = ''; // Limpiar si selecciona la opción deshabilitada
+                }
+            });
+
+            // Mapeo de estados a clases de color de Bootstrap
             const estadoClasses = {
                 'pendiente': 'info',        
                 'en-produccion': 'primary', 
@@ -227,7 +253,8 @@
                     prenda: document.getElementById('prendaPedido').value,
                     fechaPedido: document.getElementById('fechaPedido').value,
                     fechaEntrega: document.getElementById('fechaEntrega').value,
-                    precio: parseFloat(document.getElementById('precioTotal').value),
+                    // Aseguramos que el precio se lea del input
+                    precio: parseFloat(precioTotalInput.value), 
                     estado: document.getElementById('estadoPedido').value,
                     asignado: document.getElementById('asignadoA').value,
                     detalles: document.getElementById('detallesPedido').value
@@ -257,7 +284,7 @@
                         <div class="card-body">
                             <p class="card-text">
                                 <strong>Asignado a:</strong> ${pedido.asignado} <br>
-                                <strong>Precio:</strong> ${precioFormateado} <br>
+                                <strong>Precio:</strong> **${precioFormateado}** <br>
                                 <strong>Pedido:</strong> ${fechaPed} <br>
                                 <strong>Entrega:</strong> ${fechaEnt}
                             </p>
